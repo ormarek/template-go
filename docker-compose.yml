@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  dev:
+    volumes:
+      - ./app:/var/app:delegated
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+      target: dev
+    ports:
+      - 8080:8080
+    depends_on: 
+      - db
+
+  prod:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+      target: prod
+    ports:
+      - 8080:8080
+
+  db:
+    image: postgres:latest
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment: 
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: "real-eastate-manager"
+    ports:
+      - 5432:5432
+
+volumes:
+  db:
+  app:
